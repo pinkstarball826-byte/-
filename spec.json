@@ -1,0 +1,111 @@
+{
+  "meta": {
+    "title": "人間関係が疲れる原因は「境界線」だった",
+    "topic": "人間関係 / 課題の分離",
+    "total_duration_sec": 75,
+    "fps": 30,
+    "canvas": { "width": 1080, "height": 1920, "orientation": "vertical" },
+    "safe_area": { "top": 220, "bottom": 380, "side": 60 },
+    "note_for_code": "scenesを順番に描画する。各sceneのelementsをレイヤー順(z)で配置し、motionはmotion_presetsの名前で呼び出す。audioは別アプリで生成したナレーションを scene ごとに差し替え可能。"
+  },
+  "style": {
+    "palette": { "background": "#F5F3EE", "ink": "#2B2B2B", "accent": "#3FA7D6" },
+    "rules": [
+      "色は3色のみ(背景・墨色・水色)。グラデーションと影は使わない",
+      "線の太さは12pxで統一。丸い頭、顔は口のみ(目なし)",
+      "キャラA(主人公)は水色、キャラB(相手)は墨色のベタ塗り",
+      "図はすべて円・線・矢印のみ"
+    ],
+    "font": { "family": "Noto Sans JP", "weight": 700 },
+    "subtitle": { "position": "bottom", "y": 1500, "size": 64, "max_chars_per_line": 12, "color": "#2B2B2B", "outline": "#F5F3EE" },
+    "emphasis_text": { "position": "top", "y": 300, "size": 96, "color": "#3FA7D6" }
+  },
+  "assets": {
+    "characters": {
+      "A": { "color": "#3FA7D6", "parts": ["head", "body", "arm_l", "arm_r", "leg_l", "leg_r"] },
+      "B": { "color": "#2B2B2B", "parts": ["head", "body", "arm_l", "arm_r", "leg_l", "leg_r"] }
+    },
+    "mouths": ["neutral", "happy", "sad", "surprised"],
+    "icons": ["question", "exclaim", "brain", "bulb", "heart_broken", "check"],
+    "diagram_primitives": ["circle", "dashed_circle", "line", "dashed_line", "arrow", "venn_overlap", "label"]
+  },
+  "motion_presets": {
+    "popIn": { "scale": [0, 1.15, 1], "duration_ms": 350 },
+    "slideInLeft": { "x": [-600, 0], "duration_ms": 400 },
+    "slideInRight": { "x": [600, 0], "duration_ms": 400 },
+    "fadeIn": { "opacity": [0, 1], "duration_ms": 400 },
+    "zoomIn": { "scale": [1, 1.25], "duration_ms": 1200 },
+    "bounce": { "y": [0, -40, 0], "repeat": 2, "duration_ms": 500 },
+    "tiltHead": { "head_rotate_deg": [0, 8, -8, 0], "pivot": "neck", "duration_ms": 1200 },
+    "headDown": { "head_rotate_deg": [0, 10], "pivot": "neck", "duration_ms": 600 },
+    "nod": { "head_rotate_deg": [0, 8, 0], "pivot": "neck", "duration_ms": 500 },
+    "shake": { "x": [0, -12, 12, -12, 0], "duration_ms": 500 },
+    "drawLine": { "stroke_progress": [0, 1], "duration_ms": 700 },
+    "pushApart": { "x_offset": [0, 220], "duration_ms": 800 }
+  },
+  "scenes": [
+    { "id": 1, "start": 0, "duration": 6, "narration": "人間関係で疲れる人には、ある共通点があります。", "emphasis_text": "人間関係で疲れる人",
+      "elements": [
+        { "type": "character", "id": "A", "position": [540, 1000], "mouth": "neutral", "motion": "popIn" },
+        { "type": "icon", "name": "question", "position": [680, 760], "motion": "popIn", "delay_ms": 600 } ] },
+    { "id": 2, "start": 6, "duration": 7, "narration": "それは、優しさが足りないのではなく、「境界線」が曖昧なことです。", "emphasis_text": "境界線が曖昧",
+      "elements": [
+        { "type": "character", "id": "A", "position": [540, 1000], "mouth": "surprised", "motion": "tiltHead" },
+        { "type": "diagram", "shape": "dashed_circle", "center": [540, 1000], "radius": 380, "color": "accent", "motion": "drawLine" } ] },
+    { "id": 3, "start": 13, "duration": 7, "narration": "境界線とは、自分の気持ちと、相手の気持ちの間にある、見えない線のことです。", "emphasis_text": "見えない線",
+      "elements": [
+        { "type": "character", "id": "A", "position": [300, 1000], "mouth": "neutral", "motion": "slideInLeft" },
+        { "type": "character", "id": "B", "position": [780, 1000], "mouth": "neutral", "motion": "slideInRight" },
+        { "type": "diagram", "shape": "dashed_line", "from": [540, 700], "to": [540, 1300], "color": "accent", "motion": "drawLine", "delay_ms": 800 } ] },
+    { "id": 4, "start": 20, "duration": 8, "narration": "これが曖昧だと、相手の機嫌まで、自分の責任のように感じてしまいます。", "emphasis_text": "相手の機嫌＝自分の責任？",
+      "elements": [
+        { "type": "diagram", "shape": "venn_overlap", "centers": [[400, 1000], [680, 1000]], "radius": 280, "colors": ["accent", "ink"] },
+        { "type": "character", "id": "A", "position": [400, 1000], "mouth": "sad", "motion": "headDown", "delay_ms": 500 },
+        { "type": "character", "id": "B", "position": [680, 1000], "mouth": "sad", "motion": "popIn" },
+        { "type": "diagram", "shape": "arrow", "from": [680, 700], "to": [400, 700], "color": "ink", "motion": "drawLine", "delay_ms": 900 } ] },
+    { "id": 5, "start": 28, "duration": 7, "narration": "たとえば、友達が不機嫌だと、「私が何かしたかな」と考え込んでしまう。", "emphasis_text": "私が何かした？",
+      "elements": [
+        { "type": "character", "id": "B", "position": [800, 1050], "mouth": "sad", "motion": "slideInRight" },
+        { "type": "character", "id": "A", "position": [300, 1050], "mouth": "sad", "motion": "tiltHead" },
+        { "type": "icon", "name": "question", "position": [260, 700], "motion": "popIn", "delay_ms": 500 },
+        { "type": "icon", "name": "question", "position": [380, 640], "motion": "popIn", "delay_ms": 900 } ] },
+    { "id": 6, "start": 35, "duration": 7, "narration": "でも、相手の気分は、相手の課題。あなたの課題ではありません。", "emphasis_text": "相手の気分は相手の課題",
+      "elements": [
+        { "type": "diagram", "shape": "circle", "center": [300, 1000], "radius": 240, "color": "accent" },
+        { "type": "diagram", "shape": "circle", "center": [780, 1000], "radius": 240, "color": "ink" },
+        { "type": "diagram", "shape": "label", "text": "自分の課題", "position": [300, 1330], "color": "accent" },
+        { "type": "diagram", "shape": "label", "text": "相手の課題", "position": [780, 1330], "color": "ink" },
+        { "type": "character", "id": "A", "position": [300, 1000], "mouth": "neutral", "scale": 0.7, "motion": "popIn" },
+        { "type": "character", "id": "B", "position": [780, 1000], "mouth": "sad", "scale": 0.7, "motion": "popIn", "delay_ms": 300 } ] },
+    { "id": 7, "start": 42, "duration": 6, "narration": "心理学では、これを「課題の分離」と呼びます。", "emphasis_text": "課題の分離",
+      "elements": [
+        { "type": "icon", "name": "brain", "position": [540, 900], "scale": 1.5, "motion": "popIn" },
+        { "type": "diagram", "shape": "label", "text": "課題の分離", "position": [540, 1250], "size": 110, "color": "accent", "motion": "zoomIn" } ] },
+    { "id": 8, "start": 48, "duration": 8, "narration": "やり方は簡単。迷ったら、「これは、誰の問題？」と自分に聞くだけです。", "emphasis_text": "これは誰の問題？",
+      "elements": [
+        { "type": "character", "id": "A", "position": [540, 1050], "mouth": "neutral", "motion": "tiltHead" },
+        { "type": "icon", "name": "question", "position": [700, 720], "scale": 1.4, "motion": "popIn", "delay_ms": 500 } ] },
+    { "id": 9, "start": 56, "duration": 7, "narration": "自分の問題なら行動する。相手の問題なら、手放す。", "emphasis_text": "自分なら行動／相手なら手放す",
+      "elements": [
+        { "type": "diagram", "shape": "arrow", "from": [540, 800], "to": [300, 1100], "color": "accent", "motion": "drawLine" },
+        { "type": "diagram", "shape": "arrow", "from": [540, 800], "to": [780, 1100], "color": "ink", "motion": "drawLine", "delay_ms": 600 },
+        { "type": "diagram", "shape": "label", "text": "行動する", "position": [300, 1200], "color": "accent" },
+        { "type": "diagram", "shape": "label", "text": "手放す", "position": [780, 1200], "color": "ink" },
+        { "type": "icon", "name": "check", "position": [300, 1330], "motion": "popIn", "delay_ms": 1200 } ] },
+    { "id": 10, "start": 63, "duration": 7, "narration": "距離をとるのは、冷たさじゃない。長く付き合うための、優しさです。", "emphasis_text": "距離は優しさ",
+      "elements": [
+        { "type": "character", "id": "A", "position": [260, 1000], "mouth": "happy", "motion": "bounce" },
+        { "type": "character", "id": "B", "position": [820, 1000], "mouth": "happy", "motion": "bounce", "delay_ms": 200 },
+        { "type": "diagram", "shape": "dashed_line", "from": [380, 1000], "to": [700, 1000], "color": "accent", "motion": "drawLine" } ] },
+    { "id": 11, "start": 70, "duration": 5, "narration": "次回は、「断れない人の心理」を解説します。", "emphasis_text": "次回：断れない人の心理",
+      "elements": [
+        { "type": "character", "id": "A", "position": [540, 1000], "mouth": "neutral", "motion": "nod" },
+        { "type": "icon", "name": "exclaim", "position": [700, 760], "motion": "popIn", "delay_ms": 400 } ] }
+  ],
+  "audio": { "narration_file_pattern": "audio/scene_{id}.mp3", "bgm": { "file": "audio/bgm.mp3", "volume": 0.08 } },
+  "output": { "filename": "video_01.mp4", "codec": "h264", "bitrate": "8M" },
+  "checks": [
+    "公開前に「課題の分離」(アドラー心理学の考え方)の出典を確認する",
+    "字幕がセーフエリア(下380px)に被っていないかスマホで確認する"
+  ]
+}

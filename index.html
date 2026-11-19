@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>video_01 preview</title>
+<style>
+  @font-face { font-family: "Noto Sans JP"; font-weight: 700; src: url(fonts/NotoSansJP-Bold.ttf); }
+  html, body { margin: 0; background: #1b1b1b; color: #eee; font: 14px sans-serif; height: 100%; }
+  body { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 8px; box-sizing: border-box; }
+  canvas { height: calc(100vh - 80px); max-width: 100%; aspect-ratio: 9/16; background: #F5F3EE; }
+  #bar { display: flex; gap: 10px; align-items: center; width: min(560px, 100%); }
+  #seek { flex: 1; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="bar">
+  <button id="play">▶</button>
+  <input id="seek" type="range" min="0" max="75" step="0.01" value="0">
+  <span id="time">0.00s</span>
+  <label><input type="checkbox" id="sa"> safe area</label>
+</div>
+<script src="src/renderer.js"></script>
+<script>
+(async () => {
+  const spec = await (await fetch('spec.json')).json();
+  await document.fonts.load('700 64px "Noto Sans JP"', '人間関係境界線');
+  const canvas = document.getElementById('c');
+  const mk = (safe) => VideoRenderer.createRenderer(canvas, spec, { safeArea: safe });
+  let r = mk(false);
+  window.__r = r; window.__ready = true;
+  const seek = document.getElementById('seek'), time = document.getElementById('time'), play = document.getElementById('play');
+  seek.max = spec.meta.total_duration_sec;
+  let playing = false, t0 = 0;
+  const show = (t) => { r.draw(t); seek.value = t; time.textContent = t.toFixed(2) + 's'; };
+  seek.oninput = () => { playing = false; play.textContent = '▶'; show(+seek.value); };
+  document.getElementById('sa').onchange = (e) => { r = mk(e.target.checked); show(+seek.value); };
+  play.onclick = () => { playing = !playing; play.textContent = playing ? '❚❚' : '▶'; t0 = performance.now() - seek.value * 1000; };
+  (function loop() {
+    if (playing) { const t = (performance.now() - t0) / 1000; if (t >= seek.max) { playing = false; play.textContent = '▶'; } else show(t); }
+    requestAnimationFrame(loop);
+  })();
+  show(0);
+})();
+</script>
+</body>
+</html>
